@@ -40,7 +40,9 @@ class _TopPageState extends State<TopPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChatRoomPage()),
+                MaterialPageRoute(
+                  builder: (context) => ChatRoomPage(userName: '山田太郎'),
+                ),
               );
             },
             child: ChatRoomTile(
