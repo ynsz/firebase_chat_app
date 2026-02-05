@@ -32,10 +32,16 @@ class _TopPageState extends State<TopPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('チャット一覧'),
       ),
-      body: ChatRoomTile(
-        name: '山田太郎',
-        lastMessage: '今日はいい天気ですね',
-        imagePath: 'https://jp.unicharmpet.com/content/dam/sites/jp_unicharmpet_com/pet/magazine/cat/kitten/img/010029/010029_01_img.jpg',
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ChatRoomTile(
+            name: '山田太郎 $index',
+            lastMessage: '今日はいい天気ですね',
+            imagePath:
+                'https://jp.unicharmpet.com/content/dam/sites/jp_unicharmpet_com/pet/magazine/cat/kitten/img/010029/010029_01_img.jpg',
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
