@@ -1,3 +1,4 @@
+import 'package:firebase_chat_app/modules/user.dart';
 import 'package:flutter/material.dart';
 
 class TopPage extends StatefulWidget {
@@ -10,6 +11,11 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
+  final user = User(
+    id: 'abc123',
+    name: '山田太郎',
+    imagePath: 'http://example.com/image.jpg',
+  );
   int _counter = 0;
 
   void _incrementCounter() {
