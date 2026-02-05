@@ -15,6 +15,8 @@ class _TopPageState extends State<TopPage> {
     id: 'abc123',
     name: '山田太郎',
     imagePath: 'http://example.com/image.jpg',
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
   );
   int _counter = 0;
 

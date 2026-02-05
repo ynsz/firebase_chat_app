@@ -1,14 +1,14 @@
-class User {
+class Message {
   final String id;
-  final String name;
-  final String imagePath;
+  final String text;
+  final String senderId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  const User({
+  const Message({
     required this.id,
-    required this.name,
-    this.imagePath = '',
+    required this.text,
+    required this.senderId,
     required this.createdAt,
     required this.updatedAt,
   });
