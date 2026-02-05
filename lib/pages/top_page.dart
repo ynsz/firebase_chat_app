@@ -1,4 +1,5 @@
 import 'package:firebase_chat_app/modules/user.dart';
+import 'package:firebase_chat_app/pages/widgets/chat_room_tile.dart';
 import 'package:flutter/material.dart';
 
 class TopPage extends StatefulWidget {
@@ -31,17 +32,10 @@ class _TopPageState extends State<TopPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('チャット一覧'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: ChatRoomTile(
+        name: '山田太郎',
+        lastMessage: '今日はいい天気ですね',
+        imagePath: 'https://jp.unicharmpet.com/content/dam/sites/jp_unicharmpet_com/pet/magazine/cat/kitten/img/010029/010029_01_img.jpg',
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
