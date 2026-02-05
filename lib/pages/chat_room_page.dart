@@ -53,13 +53,15 @@ class ChatRoomPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final message = messageList[index];
             final isSendFromMe = message.senderId == myUid;
-            
+
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 spacing: 4,
-                textDirection: isSendFromMe ? TextDirection.rtl : TextDirection.ltr,
+                textDirection: isSendFromMe
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
                 children: [
                   Container(
                     padding: EdgeInsets.all(8),
@@ -77,6 +79,22 @@ class ChatRoomPage extends StatelessWidget {
               ),
             );
           },
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(
+          16,
+        ).copyWith(bottom: 16 + MediaQuery.of(context).padding.bottom),
+        color: Colors.white,
+        child: Row(
+          children: [
+            Flexible(
+              child: TextField(
+                decoration: InputDecoration(border: OutlineInputBorder()),
+              ),
+            ),
+            IconButton(onPressed: () {}, icon: Icon(Icons.send)),
+          ],
         ),
       ),
     );
