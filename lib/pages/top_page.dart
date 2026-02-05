@@ -2,9 +2,7 @@ import 'package:firebase_chat_app/modules/user.dart';
 import 'package:flutter/material.dart';
 
 class TopPage extends StatefulWidget {
-  const TopPage({super.key, required this.title});
-
-  final String title;
+  const TopPage({super.key});
 
   @override
   State<TopPage> createState() => _TopPageState();
@@ -31,7 +29,7 @@ class _TopPageState extends State<TopPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text('チャット一覧'),
       ),
       body: Center(
         child: Column(
