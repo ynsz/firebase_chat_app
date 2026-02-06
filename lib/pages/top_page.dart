@@ -1,5 +1,6 @@
 import 'package:firebase_chat_app/modules/user.dart';
 import 'package:firebase_chat_app/pages/chat_room_page.dart';
+import 'package:firebase_chat_app/pages/profile_setting_page.dart';
 import 'package:firebase_chat_app/pages/widgets/chat_room_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,17 @@ class _TopPageState extends State<TopPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('チャット一覧'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileSettingPage()),
+              );
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: 10,
