@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154594657766",
+    "project_id": "flutter-chat-app-2026-yuna",
+    "storage_bucket": "flutter-chat-app-2026-yuna.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154594657766:android:e09d12a9fa7f2b1180c227",
+        "android_client_info": {
+          "package_name": "com.example.firebase_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYzlEBBh43ZtbDjrjLS6qsvjC-l0NV0pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
