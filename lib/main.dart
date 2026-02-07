@@ -1,3 +1,4 @@
+import 'package:firebase_chat_app/repositories/user_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -8,6 +9,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await UserRepository.instance.createUser();
   runApp(MyApp());
 }
 
