@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/modules/message.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
@@ -14,29 +15,29 @@ class ChatRoomPage extends StatelessWidget {
         id: '1',
         text: 'こんにちは',
         senderId: 'hoge',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       ),
       Message(
         id: '2',
         text: 'どうもー！',
         senderId: 'fuga',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       ),
       Message(
         id: '3',
         text: '元気にしてますか？',
         senderId: 'hoge',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       ),
       Message(
         id: '4',
         text: 'こんにちはこんにちはこんにちはこんにちはこんにちはこんにちは',
         senderId: 'fuga',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       ),
     ];
     final String myUid = 'hoge';
@@ -74,7 +75,7 @@ class ChatRoomPage extends StatelessWidget {
                     ),
                     child: Text(message.text),
                   ),
-                  Text(DateFormat('HH:mm').format(message.createdAt)),
+                  Text(DateFormat('HH:mm').format(message.createdAt.toDate())),
                 ],
               ),
             );

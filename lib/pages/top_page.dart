@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/modules/user.dart';
 import 'package:firebase_chat_app/pages/chat_room_page.dart';
 import 'package:firebase_chat_app/pages/profile_setting_page.dart';
@@ -16,8 +17,8 @@ class _TopPageState extends State<TopPage> {
     id: 'abc123',
     name: '山田太郎',
     imagePath: 'http://example.com/image.jpg',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
   );
   int _counter = 0;
 

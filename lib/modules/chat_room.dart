@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChatRoom {
   final String id;
   final List<String> participantIds;
   final Map<String, int> unreadCounts;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final Timestamp createdAt;
+  final Timestamp updatedAt;
   final String lastMessage;
 
   const ChatRoom({
