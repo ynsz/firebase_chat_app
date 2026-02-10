@@ -1,5 +1,6 @@
 import 'package:firebase_chat_app/repositories/chat_room_repository.dart';
 import 'package:firebase_chat_app/repositories/user_repository.dart';
+import 'package:firebase_chat_app/services/shared_pref_service.dart';
 
 class UserService {
   static final instance = UserService();
@@ -16,7 +17,10 @@ class UserService {
         );
       }).toList();
 
-      await Future.wait(createChatRoomFunctions);
+      await Future.wait([
+        ...createChatRoomFunctions,
+        SharedPrefService.instance.setUid(uid),
+      ]);
     } catch (e) {
       print('ユーザー作成に失敗しました: $e');
     }

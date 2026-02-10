@@ -1,4 +1,4 @@
-import 'package:firebase_chat_app/repositories/user_repository.dart';
+import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:firebase_chat_app/services/user_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await SharedPrefService.instance.setPrefs();
   await UserService.instance.createUser();
   runApp(MyApp());
 }
