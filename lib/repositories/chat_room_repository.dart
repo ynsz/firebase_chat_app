@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatRoomRepository {
+  static final instance = ChatRoomRepository();
   final _firestore = FirebaseFirestore.instance;
   late final _chatRoomCol = _firestore.collection('chatRooms');
 

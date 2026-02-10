@@ -6,9 +6,9 @@ class UserRepository {
   final _firestore = FirebaseFirestore.instance;
   late final _userCol = _firestore.collection('users');
 
-  Future<void> createUser() async {
+  Future<String> createUser() async {
     try {
-      await _userCol.add({
+      final result = await _userCol.add({
         'name': '',
         'imagePath': '',
         'createdAt': FieldValue.serverTimestamp(),
@@ -16,8 +16,10 @@ class UserRepository {
       });
 
       print('アカウント作成完了');
+      return result.id;
     } catch (e) {
       print('アカウント作成時にエラーが発生: $e');
+      return '';
     }
   }
 
