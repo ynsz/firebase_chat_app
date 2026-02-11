@@ -11,7 +11,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await SharedPrefService.instance.setPrefs();
-  await UserService.instance.createUser();
+  final uid = SharedPrefService.instance.getUid();
+  if(uid.isEmpty) {
+    await UserService.instance.createUser();
+  }
+
   runApp(MyApp());
 }
 
