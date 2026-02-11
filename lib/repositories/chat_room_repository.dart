@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_chat_app/modules/chat_room.dart';
 
 class ChatRoomRepository {
   static final instance = ChatRoomRepository();
@@ -16,5 +17,36 @@ class ChatRoomRepository {
       'updatedAt': FieldValue.serverTimestamp(),
       'lastMessage': '',
     });
+  }
+
+  Future<List<ChatRoom>> fetchChatRooms(String uid) async {
+    try {
+      final snapshot = await _chatRoomCol
+          .where('participantIds', arrayContains: uid)
+          .orderBy('updatedAt', descending: true)
+          .get();
+      final docs = snapshot.docs;
+      final chatRooms = docs.map((doc) {
+        final data = doc.data();
+        final participantIds = (data['participantIds'] as List).cast<String>();
+        final unreadCounts = (data['unreadCounts'] as Map<String, dynamic>)
+            .cast<String, int>();
+
+        return ChatRoom(
+          id: doc.id,
+          participantIds: participantIds,
+          unreadCounts: unreadCounts,
+          lastMessage: data['lastMessage'],
+          createdAt: data['createdAt'],
+          updatedAt: data['updatedAt'],
+        );
+      });
+
+      print(chatRooms.length);
+      return chatRooms.toList();
+    } catch (e) {
+      print('参加しているチャットルームの情報取得失敗 $e');
+      return [];
+    }
   }
 }

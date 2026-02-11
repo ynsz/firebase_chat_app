@@ -1,3 +1,4 @@
+import 'package:firebase_chat_app/repositories/chat_room_repository.dart';
 import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:firebase_chat_app/services/user_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,14 +8,14 @@ import 'pages/top_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPrefService.instance.setPrefs();
-  final uid = SharedPrefService.instance.getUid();
-  if(uid.isEmpty) {
+  String uid = SharedPrefService.instance.getUid();
+  if (uid.isEmpty) {
     await UserService.instance.createUser();
+    uid = SharedPrefService.instance.getUid();
   }
+  await ChatRoomRepository.instance.fetchChatRooms(uid);
 
   runApp(MyApp());
 }
