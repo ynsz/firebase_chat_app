@@ -21,9 +21,7 @@ class ChatRoomTile extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 24,
-            foregroundImage: NetworkImage(
-              imagePath,
-            ),
+            foregroundImage: imagePath.isEmpty ? null : NetworkImage(imagePath),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,

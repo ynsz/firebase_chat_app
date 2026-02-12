@@ -3,6 +3,9 @@ import 'package:firebase_chat_app/modules/user.dart';
 import 'package:firebase_chat_app/pages/chat_room_page.dart';
 import 'package:firebase_chat_app/pages/profile_setting_page.dart';
 import 'package:firebase_chat_app/pages/widgets/chat_room_tile.dart';
+import 'package:firebase_chat_app/repositories/chat_room_repository.dart';
+import 'package:firebase_chat_app/repositories/user_repository.dart';
+import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 
 class TopPage extends StatefulWidget {
@@ -13,19 +16,27 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  final user = User(
-    id: 'abc123',
-    name: '山田太郎',
-    imagePath: 'http://example.com/image.jpg',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  );
-  int _counter = 0;
+  final myUid = SharedPrefService.instance.getUid();
+  final userMap = <String, User>{};
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  Future<void> updateUserMap(Set<String> userIds) async {
+    final missingIds = userIds.difference(userMap.keys.toSet());
+    if (missingIds.isEmpty) {
+      return;
+    }
+
+    final fetchedUsers = await Future.wait(
+      missingIds.map((uid) => UserRepository.instance.fetchUser(uid)),
+    );
+
+    for (final user in fetchedUsers) {
+      if (user == null) {
+        continue;
+      }
+
+      userMap[user.id] = user;
+    }
+    setState(() {});
   }
 
   @override
@@ -39,38 +50,70 @@ class _TopPageState extends State<TopPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ProfileSettingPage()),
+                MaterialPageRoute(
+                  builder: (context) => const ProfileSettingPage(),
+                ),
               );
             },
             icon: Icon(Icons.settings),
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatRoomPage(userName: '山田太郎'),
+      body: StreamBuilder(
+        stream: ChatRoomRepository.instance.joinedChatRoomSnapshot(myUid),
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (asyncSnapshot.hasError) {
+            return Center(
+              child: Text('チャットルーム取得中にエラーが発生しました。: ${asyncSnapshot.error}'),
+            );
+          }
+
+          final chatRooms = asyncSnapshot.data ?? [];
+          final userIds =
+              chatRooms
+                  .map((chatRoom) => chatRoom.participantIds)
+                  .expand((inner) => inner)
+                  .toSet()
+                ..remove(myUid);
+
+          updateUserMap(userIds);
+
+          return ListView.builder(
+            itemCount: chatRooms.length,
+            itemBuilder: (context, index) {
+              final chatRoom = chatRooms[index];
+              final partnerUid = chatRoom.participantIds.firstWhere(
+                (id) => id != myUid,
+              );
+              final partnerUser = userMap[partnerUid];
+
+              if (partnerUser == null) {
+                return const SizedBox();
+              }
+
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChatRoomPage(userName: partnerUser.name),
+                    ),
+                  );
+                },
+                child: ChatRoomTile(
+                  name: partnerUser.name,
+                  lastMessage: chatRoom.lastMessage,
+                  imagePath: partnerUser.imagePath,
                 ),
               );
             },
-            child: ChatRoomTile(
-              name: '山田太郎 $index',
-              lastMessage: '今日はいい天気ですね',
-              imagePath:
-                  'https://jp.unicharmpet.com/content/dam/sites/jp_unicharmpet_com/pet/magazine/cat/kitten/img/010029/010029_01_img.jpg',
-            ),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -14,9 +14,7 @@ void main() async {
   String uid = SharedPrefService.instance.getUid();
   if (uid.isEmpty) {
     await UserService.instance.createUser();
-    uid = SharedPrefService.instance.getUid();
   }
-  final (userMap, chatRooms) = await ChatRoomService.instance.fetchJoinedChatRooms(uid);
 
   runApp(MyApp());
 }
