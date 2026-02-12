@@ -44,4 +44,21 @@ class UserRepository {
       return [];
     }
   }
+
+  Future<User?> fetchUser(String uid) async {
+    final doc = await _userCol.doc(uid).get();
+    final data = doc.data();
+
+    if (data == null) {
+      return null;
+    }
+
+    return User(
+      id: doc.id,
+      name: data['name'],
+      imagePath: data['imagePath'],
+      createdAt: data['createdAt'],
+      updatedAt: data['updatedAt'],
+    );
+  }
 }

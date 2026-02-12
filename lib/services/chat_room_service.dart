@@ -1,6 +1,7 @@
 import 'package:firebase_chat_app/modules/chat_room.dart';
 import 'package:firebase_chat_app/modules/user.dart';
 import 'package:firebase_chat_app/repositories/chat_room_repository.dart';
+import 'package:firebase_chat_app/repositories/user_repository.dart';
 
 class ChatRoomService {
   static final instance = ChatRoomService();
@@ -13,5 +14,10 @@ class ChatRoomService {
         .map((chatRoom) => chatRoom.participantIds)
         .expand((inner) => inner)
         .toSet();
+    userIds.remove(uid);
+
+    final fetchUserFunc = userIds.map(
+      (userId) => UserRepository.instance.fetchUser(userId),
+    ).toList();
   }
 }
