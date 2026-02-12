@@ -16,8 +16,13 @@ class ChatRoomService {
         .toSet();
     userIds.remove(uid);
 
-    final fetchUserFunc = userIds.map(
-      (userId) => UserRepository.instance.fetchUser(userId),
-    ).toList();
+    final fetchUserFunc = userIds
+        .map((userId) => UserRepository.instance.fetchUser(userId))
+        .toList();
+    final users = (await Future.wait(fetchUserFunc)).whereType<User>().toList();
+
+    final userMap = {for (final user in users) user.id: user};
+
+    return (userMap, chatRooms);
   }
 }

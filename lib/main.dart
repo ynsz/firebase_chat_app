@@ -1,4 +1,5 @@
 import 'package:firebase_chat_app/repositories/chat_room_repository.dart';
+import 'package:firebase_chat_app/services/chat_room_service.dart';
 import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:firebase_chat_app/services/user_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,7 +16,7 @@ void main() async {
     await UserService.instance.createUser();
     uid = SharedPrefService.instance.getUid();
   }
-  await ChatRoomRepository.instance.fetchChatRooms(uid);
+  final (userMap, chatRooms) = await ChatRoomService.instance.fetchJoinedChatRooms(uid);
 
   runApp(MyApp());
 }
