@@ -1,15 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/modules/message.dart';
+import 'package:firebase_chat_app/repositories/message_repository.dart';
+import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 class ChatRoomPage extends StatelessWidget {
-  const ChatRoomPage({required this.userName, super.key});
-
+  const ChatRoomPage({required this.roomId, required this.userName, super.key});
+  final String roomId;
   final String userName;
+
 
   @override
   Widget build(BuildContext context) {
+    final myUid = SharedPrefService.instance.getUid();
+    final controller = TextEditingController();
+
     final messageList = [
       Message(
         id: '1',
@@ -40,7 +46,6 @@ class ChatRoomPage extends StatelessWidget {
         updatedAt: Timestamp.now(),
       ),
     ];
-    final String myUid = 'hoge';
 
     return Scaffold(
       appBar: AppBar(title: Text(userName)),
@@ -67,7 +72,10 @@ class ChatRoomPage extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(8),
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * .6,
+                      maxWidth: MediaQuery
+                          .of(context)
+                          .size
+                          .width * .6,
                     ),
                     decoration: BoxDecoration(
                       color: isSendFromMe ? Colors.green : Colors.grey[300],
@@ -85,16 +93,24 @@ class ChatRoomPage extends StatelessWidget {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(
           16,
-        ).copyWith(bottom: 16 + MediaQuery.of(context).padding.bottom),
+        ).copyWith(bottom: 16 + MediaQuery
+            .of(context)
+            .padding
+            .bottom),
         color: Colors.white,
         child: Row(
           children: [
             Flexible(
               child: TextField(
+                controller: controller,
                 decoration: InputDecoration(border: OutlineInputBorder()),
               ),
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.send)),
+            IconButton(onPressed: () {
+              MessageRepository.instance.createMessage(
+                  roomId: roomId, message: controller.text, senderId: myUid,);
+              controller.clear();
+            }, icon: Icon(Icons.send)),
           ],
         ),
       ),

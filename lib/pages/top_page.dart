@@ -100,8 +100,10 @@ class _TopPageState extends State<TopPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ChatRoomPage(userName: partnerUser.name),
+                      builder: (context) => ChatRoomPage(
+                        roomId: chatRoom.id,
+                        userName: partnerUser.name,
+                      ),
                     ),
                   );
                 },
