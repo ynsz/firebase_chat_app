@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/modules/message.dart';
 import 'package:firebase_chat_app/repositories/message_repository.dart';
+import 'package:firebase_chat_app/services/message_service.dart';
 import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
@@ -88,7 +89,7 @@ class ChatRoomPage extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                MessageRepository.instance.createMessage(
+                MessageService.instance.sendMessage(
                   roomId: roomId,
                   message: controller.text,
                   senderId: myUid,

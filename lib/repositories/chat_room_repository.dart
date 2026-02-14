@@ -15,7 +15,8 @@ class ChatRoomRepository {
           (snapshot) =>
           snapshot.docs.map((doc) {
             final data = doc.data();
-            final participantIds = (data['participantIds'] as List).cast<String>();
+            final participantIds = (data['participantIds'] as List).cast<
+                String>();
             final unreadCounts = (data['unreadCounts'] as Map<String, dynamic>)
                 .cast<String, int>();
             return ChatRoom(
@@ -71,5 +72,15 @@ class ChatRoomRepository {
       print('参加しているチャットルームの情報取得失敗 $e');
       return [];
     }
+  }
+
+  Future<void> updateRoom({
+    required String roomId,
+    required String lastMessage,
+  }) async {
+    await _chatRoomCol.doc(roomId).update({
+      'lastMessage': lastMessage,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 }
