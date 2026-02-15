@@ -96,8 +96,9 @@ class _TopPageState extends State<TopPage> {
               }
 
               return InkWell(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  ChatRoomRepository.instance.resetUnreadCount(roomId: chatRoom.id, userId: myUid);
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChatRoomPage(
@@ -107,6 +108,7 @@ class _TopPageState extends State<TopPage> {
                       ),
                     ),
                   );
+                  ChatRoomRepository.instance.resetUnreadCount(roomId: chatRoom.id, userId: myUid);
                 },
                 child: ChatRoomTile(
                   name: partnerUser.name,

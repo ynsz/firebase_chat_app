@@ -12,23 +12,22 @@ class ChatRoomRepository {
         .orderBy('updatedAt', descending: true)
         .snapshots()
         .map(
-          (snapshot) =>
-          snapshot.docs.map((doc) {
+          (snapshot) => snapshot.docs.map((doc) {
             final data = doc.data();
-            final participantIds = (data['participantIds'] as List).cast<
-                String>();
+            final participantIds = (data['participantIds'] as List)
+                .cast<String>();
             final unreadCounts = (data['unreadCounts'] as Map<String, dynamic>)
                 .cast<String, int>();
             return ChatRoom(
-                id: doc.id,
-                participantIds: participantIds,
-                unreadCounts: unreadCounts,
-                createdAt: data['createdAt'],
-                updatedAt: data['updatedAt'],
-                lastMessage: data['lastMessage']
+              id: doc.id,
+              participantIds: participantIds,
+              unreadCounts: unreadCounts,
+              createdAt: data['createdAt'],
+              updatedAt: data['updatedAt'],
+              lastMessage: data['lastMessage'],
             );
           }).toList(),
-    );
+        );
   }
 
   Future<void> createChatRoom({
@@ -84,5 +83,12 @@ class ChatRoomRepository {
       'unreadCounts.$partnerId': FieldValue.increment(1),
       'updatedAt': FieldValue.serverTimestamp(),
     });
+  }
+
+  Future<void> resetUnreadCount({
+    required String roomId,
+    required String userId,
+  }) async {
+    await _chatRoomCol.doc(roomId).update({'unreadCounts.$userId': 0});
   }
 }
