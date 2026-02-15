@@ -8,6 +8,7 @@ class MessageService {
     required String roomId,
     required String message,
     required String senderId,
+    required String partnerId,
   }) async {
     await MessageRepository.instance.createMessage(
       roomId: roomId,
@@ -17,6 +18,7 @@ class MessageService {
     await ChatRoomRepository.instance.updateRoom(
       roomId: roomId,
       lastMessage: message,
+      partnerId: partnerId,
     );
   }
 }

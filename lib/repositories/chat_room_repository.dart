@@ -77,9 +77,11 @@ class ChatRoomRepository {
   Future<void> updateRoom({
     required String roomId,
     required String lastMessage,
+    required String partnerId,
   }) async {
     await _chatRoomCol.doc(roomId).update({
       'lastMessage': lastMessage,
+      'unreadCounts.$partnerId': FieldValue.increment(1),
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

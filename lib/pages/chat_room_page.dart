@@ -7,9 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
 class ChatRoomPage extends StatelessWidget {
-  const ChatRoomPage({required this.roomId, required this.userName, super.key});
+  const ChatRoomPage({
+    required this.roomId,
+    required this.partnerId,
+    required this.userName,
+    super.key,
+  });
 
   final String roomId;
+  final String partnerId;
   final String userName;
 
   @override
@@ -93,6 +99,7 @@ class ChatRoomPage extends StatelessWidget {
                   roomId: roomId,
                   message: controller.text,
                   senderId: myUid,
+                  partnerId: partnerId,
                 );
                 controller.clear();
               },

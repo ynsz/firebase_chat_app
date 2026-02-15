@@ -102,6 +102,7 @@ class _TopPageState extends State<TopPage> {
                     MaterialPageRoute(
                       builder: (context) => ChatRoomPage(
                         roomId: chatRoom.id,
+                        partnerId: partnerUid,
                         userName: partnerUser.name,
                       ),
                     ),
@@ -111,6 +112,7 @@ class _TopPageState extends State<TopPage> {
                   name: partnerUser.name,
                   lastMessage: chatRoom.lastMessage,
                   imagePath: partnerUser.imagePath,
+                  unreadCount: chatRoom.unreadCounts[myUid] ?? 0,
                 ),
               );
             },

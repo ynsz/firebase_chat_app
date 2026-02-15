@@ -5,12 +5,14 @@ class ChatRoomTile extends StatelessWidget {
     required this.name,
     required this.imagePath,
     required this.lastMessage,
+    required this.unreadCount,
     super.key,
   });
 
   final String name;
   final String imagePath;
   final String lastMessage;
+  final int unreadCount;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,22 @@ class ChatRoomTile extends StatelessWidget {
               Text(lastMessage, style: TextStyle(color: Colors.grey)),
             ],
           ),
+          if (unreadCount != 0) ...[
+            Spacer(),
+            Container(
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                '$unreadCount',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
         ],
       ),
     );
