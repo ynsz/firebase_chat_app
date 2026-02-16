@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:firebase_chat_app/services/shared_pref_service.dart';
+import 'package:firebase_chat_app/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,7 +30,21 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('プロフィール設定'),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.save))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (image == null) {
+                return;
+              }
+              final uid = SharedPrefService.instance.getUid();
+              StorageService.instance.uploadImage(
+                imagePath: '$uid.png',
+                file: image!,
+              );
+            },
+            icon: Icon(Icons.save),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
