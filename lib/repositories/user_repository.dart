@@ -61,4 +61,16 @@ class UserRepository {
       updatedAt: data['updatedAt'],
     );
   }
+
+  Future<void> updateUser({
+    required String uid,
+    required String name,
+    required String imagePath,
+  }) async {
+    await _userCol.doc(uid).update({
+      'name': name,
+      'imagePath': imagePath,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }
