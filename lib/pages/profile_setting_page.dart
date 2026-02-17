@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:firebase_chat_app/modules/user.dart';
+import 'package:firebase_chat_app/repositories/user_repository.dart';
 import 'package:firebase_chat_app/services/shared_pref_service.dart';
 import 'package:firebase_chat_app/services/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,9 @@ class ProfileSettingPage extends StatefulWidget {
 }
 
 class _ProfileSettingPageState extends State<ProfileSettingPage> {
+  late final User currentUser;
+  final myUid = SharedPrefService.instance.getUid();
+  final nameController = TextEditingController();
   final _picker = ImagePicker();
   File? image;
 
@@ -25,6 +30,20 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
     setState(() {});
   }
 
+  Future<void> fetchUser() async {
+    final user = await UserRepository.instance.fetchUser(myUid);
+    if (user == null) {
+      throw Exception('ユーザー情報がありません。');
+    }
+    currentUser = user;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,15 +51,22 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
         title: Text('プロフィール設定'),
         actions: [
           IconButton(
-            onPressed: () {
-              if (image == null) {
-                return;
-              }
-              final uid = SharedPrefService.instance.getUid();
-              StorageService.instance.uploadImage(
-                imagePath: '$uid.png',
-                file: image!,
+            onPressed: () async {
+              final imagePath = image == null
+                  ? currentUser.imagePath
+                  : await StorageService.instance.uploadImage(
+                      imagePath: '$myUid.png',
+                      file: image!,
+                    );
+
+              await UserRepository.instance.updateUser(
+                uid: myUid,
+                name: nameController.text,
+                imagePath: imagePath,
               );
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
             },
             icon: Icon(Icons.save),
           ),
@@ -77,7 +103,7 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
             ),
             SizedBox(height: 16),
             Text('プロフィール名'),
-            TextField(),
+            TextField(controller: nameController),
           ],
         ),
       ),
