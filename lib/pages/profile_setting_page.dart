@@ -15,6 +15,7 @@ class ProfileSettingPage extends StatefulWidget {
 
 class _ProfileSettingPageState extends State<ProfileSettingPage> {
   late final User currentUser;
+  ImageProvider? userImage;
   final myUid = SharedPrefService.instance.getUid();
   final nameController = TextEditingController();
   final _picker = ImagePicker();
@@ -27,6 +28,7 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
     }
 
     image = File(pickedImage.path);
+    userImage = FileImage(image!);
     setState(() {});
   }
 
@@ -36,12 +38,24 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
       throw Exception('ユーザー情報がありません。');
     }
     currentUser = user;
+    nameController.text = currentUser.name;
+  }
+
+  void initUserImage() {
+    if (currentUser.imagePath.isEmpty) {
+      return;
+    }
+    userImage = NetworkImage(currentUser.imagePath);
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    fetchUser();
+    Future(() async {
+      await fetchUser();
+      initUserImage();
+    });
   }
 
   @override
@@ -88,14 +102,11 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     shape: BoxShape.circle,
-                    image: image == null
+                    image: userImage == null
                         ? null
-                        : DecorationImage(
-                            image: FileImage(image!),
-                            fit: BoxFit.cover,
-                          ),
+                        : DecorationImage(image: userImage!, fit: BoxFit.cover),
                   ),
-                  child: image == null
+                  child: userImage == null
                       ? Icon(Icons.image_outlined, color: Colors.white)
                       : null,
                 ),
